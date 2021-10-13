@@ -1,0 +1,10 @@
+﻿#carte {
+    height:80vh;
+}
+.leaflet-control-container .leaflet-routing-container-hide {
+    display: none;
+}
+.leaflet-routing-alternatives-container {
+    display:none;
+}
+

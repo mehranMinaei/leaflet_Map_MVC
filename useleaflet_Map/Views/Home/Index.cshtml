@@ -1,0 +1,80 @@
+﻿@model useleaflet_Map.VM.orderListVM
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>leaflet</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin="" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <link rel="stylesheet" href="~/Content/Styleleaflet.css" />
+</head>
+<body>
+    <div id="carte"></div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script>
+        var orders= @Html.Raw(Json.Encode(Model));
+        $(document).ready(function () {
+
+            $('.leaflet-routing-container').css({ display: 'none' });
+            $('.leaflet-routing-container-hide').css({ display: 'none' });
+
+        });
+        window.onload = function () {
+
+            var Longitude_customer =orders.Longitude_customer;
+           // alert(Longitude_customer)
+            let macarte = L.map("carte").setView([48.852969, 2.349903], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+                attribution: "mehran",
+                minZoom: 1,
+                maxZoom:20
+            }).addTo(macarte);
+
+            L.Routing.control({
+                serviceUrl: 'http://router.project-osrm.org/route/v1',
+                waypoints: [
+
+                  L.latLng(57.74, 11.94),
+                  L.latLng(57.6792, 11.949),
+                  L.latLng(57.5792, 11.549)
+                ]
+
+            }).addTo(macarte);
+            var myIcon = L.icon({
+                iconUrl: '/Images/iconDelivery4.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [-3, -76],
+                //shadowUrl: 'my-icon-shadow.png',
+                shadowSize: [25, 25],
+                shadowAnchor: [25, 25]
+            });
+            L.marker([57.74, 11.94], { icon: myIcon, title: 'Hello mehran' }).bindTooltip("my tooltip text").openTooltip().addTo(macarte);
+            L.marker([57.6792, 11.949], { icon: myIcon, title: 'Hello mehran' }).bindPopup('<p>Hello world!<br />This is a nice popup.</p>').openPopup().addTo(macarte);
+            //$('.leaflet-top').add
+            L.control._container.style.display = "None";
+        }
+
+        jQuery(window).load(function () {
+            $('.leaflet-routing-container').css({ display: 'none' });
+            $('.leaflet-routing-container-hide').css({ display: 'none' });
+
+        });
+
+    </script>
+</body>
+</html>
